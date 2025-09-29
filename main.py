@@ -1,4 +1,1 @@
-def main():
-  pass
-
-main()
+print("67")
