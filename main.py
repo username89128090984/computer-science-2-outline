@@ -21,6 +21,15 @@ subjectList = {
 }
 
 def gradeManagement():
+
+    activityData = {
+        "name" : "",
+        "type" : "",
+        "subject" : "",
+        "score" : 0,
+        "maximum" : 0
+    }
+
     while True:
         print("1. Record grades")
         print("2. Display grade summary")
@@ -49,6 +58,8 @@ def gradeManagement():
                             for identifier, subject in subjectList.items():
                                 print(f"{identifier}. {subject}")
                             subject = int(input("Enter the number corresponding to this activity's subject... "))
+
+                            print("Are these details correct?")
 
                             print("[PLACEHOLDER - insert code for writing data to file once database is figured out]")
                             print()
