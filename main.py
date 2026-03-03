@@ -26,8 +26,8 @@ def gradeManagement():
         "name" : "",
         "type" : "",
         "subject" : "",
-        "score" : 0,
-        "maximum" : 0
+        "score" : 0.0,
+        "maximum" : 0.0
     }
 
     while True:
@@ -48,21 +48,36 @@ def gradeManagement():
 
                     match choice:
                         case 1:
-                            name = input("Enter a name for the activity... ")
-                            type = input("Is this an AA or an FA? ").upper()
-                            maximum = float(input("What is its maximum possible score? "))
-                            score = float(input("What is your score on this activity? "))
-                            print()
+                            while True:
+                                activityData["name"] = input("Enter a name for the activity... ")
+                                activityData["type"] = input("Is this an AA or an FA? ").upper()
+                                activityData["maximum"] = float(input("What is its maximum possible score? "))
+                                activityData["score"] = float(input("What is your score on this activity? "))
+                                print()
 
-                            print("List of subjects:")
-                            for identifier, subject in subjectList.items():
-                                print(f"{identifier}. {subject}")
-                            subject = int(input("Enter the number corresponding to this activity's subject... "))
+                                print("List of subjects:")
+                                for identifier, subject in subjectList.items():
+                                    print(f"{identifier}. {subject}")
+                                subjectID = int(input("Enter the number corresponding to this activity's subject... "))
+                                print()
 
-                            print("Are these details correct?")
+                                activityData["subject"] = subjectList[subjectID]
 
-                            print("[PLACEHOLDER - insert code for writing data to file once database is figured out]")
-                            print()
+                                for key, value in activityData.items():
+                                    print(f"{key.title()}: {value}")
+                                choice = input("Are these details correct? (y/n) ")
+
+                                match choice:
+                                    case "y":
+                                        print("[PLACEHOLDER - insert code for writing data to file once database is figured out]")
+                                        break
+                                    case "n":
+                                        continue
+                                    case _:
+                                        print("Please enter either y(es) or n(o).")
+                                        print()
+
+                                print()
 
                         case 2:
                             print("[PLACEHOLDER - finish scheduler first, then insert code for retrieval from file]")
