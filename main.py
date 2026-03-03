@@ -1,24 +1,24 @@
 import json, datetime
 
-subjectList = {
-    1 : "Math 2 (algebra)",
-    2 : "Math 3 (geometry)",
+subjectList = [
+    "Math 2 (algebra)",
+    "Math 3 (geometry)",
 
-    3 : "English",
-    4 : "Filipino",
+    "English",
+    "Filipino",
 
-    5 : "ES",
-    6 : "Physics",
-    7 : "Chemistry",
-    8 : "Biology",
+    "ES",
+    "Physics",
+    "Chemistry",
+    "Biology",
 
-    9 : "PE",
-    10 : "Health",
-    11 : "Music",
+    "PE",
+    "Health",
+    "Music",
 
-    12 : "ADTech",
-    13 : "Computer Science"
-}
+    "ADTech",
+    "Computer Science"
+]
 
 def gradeManagement():
 
@@ -56,8 +56,8 @@ def gradeManagement():
                                 print()
 
                                 print("List of subjects:")
-                                for identifier, subject in subjectList.items():
-                                    print(f"{identifier}. {subject}")
+                                for index, subject in enumerate(subjectList):
+                                    print(f"{index}. {subject}")
                                 subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
 
