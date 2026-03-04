@@ -21,7 +21,6 @@ subjectList = [
 ]
 
 def gradeManagement():
-
     activityData = {
         "name" : "",
         "type" : "",
@@ -55,9 +54,7 @@ def gradeManagement():
                                 activityData["score"] = float(input("What is your score on this activity? "))
                                 print()
 
-                                print("List of subjects:")
-                                for index, subject in enumerate(subjectList):
-                                    print(f"{index}. {subject}")
+                                printSubjectList()
                                 subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
 
@@ -72,6 +69,7 @@ def gradeManagement():
                                         print("[PLACEHOLDER - insert code for writing data to file once database is figured out]")
                                         break
                                     case "n":
+                                        print()
                                         continue
                                     case _:
                                         print("Please enter either y(es) or n(o).")
@@ -105,8 +103,81 @@ def gradeManagement():
 
 
 def scheduler():
-    print("[PLACEHOLDER - insert grade manager code]")
-    print()
+    activityData = {
+        "name": "",
+        "type": "",
+        "subject": "",
+        "deadline": datetime.datetime.min
+    }
+
+    dateFormat = "%m/%d/%Y"
+
+    while True:
+        print("1. Record due dates")
+        print("2. Display deadline summary")
+        print("3. Back")
+        choice = int(input("Enter the number corresponding to your choice: "))
+
+        match choice:
+            case 1:
+                while True:
+                    print()
+                    print("How will you enter this activity's information?")
+                    print("1. Manual entry")
+                    print("2. Select an activity recorded from the schedule tracker")
+                    choice = int(input("Enter the number corresponding to your choice: "))
+                    print()
+
+                    match choice:
+                        case 1:
+                            activityData["name"] = input("Enter a name for the activity... ")
+                            activityData["type"] = input("Is this an AA or an FA? ").upper()
+                            activityData["deadline"] = datetime.datetime.strptime(input("When is this due? (mm/dd/yyyy) "), dateFormat)
+                            print()
+
+                            printSubjectList()
+                            subjectID = int(input("Enter the number corresponding to this activity's subject... "))
+                            print()
+
+                            activityData["subject"] = subjectList[subjectID]
+
+                            for key, value in activityData.items():
+                                print(f"{key.title()}: {value}")
+                            choice = input("Are these details correct? (y/n) ")
+
+                            match choice:
+                                case "y":
+                                    print("[PLACEHOLDER - insert code for writing data to file once database is figured out]")
+                                    break
+                                case "n":
+                                    print()
+                                    continue
+                                case _:
+                                    print("Please enter either y(es) or n(o).")
+                                    print()
+
+                            choice = input("Would you like to record another activity? (y/n) ").lower()
+                            match choice:
+                                case "y":
+                                    pass
+                                case "n":
+                                    break
+                                case _:
+                                    print("Please enter either y(es) or n(o).")
+                                    print()
+            case 2:
+                print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
+                print()
+            case 3:
+                break
+            case _:
+                print("Please enter a number between 1 and 3.")
+                print()
+
+def printSubjectList():
+    print("List of subjects:")
+    for index, subject in enumerate(subjectList):
+        print(f"{index}. {subject}")
 
 def main():
     while True:
