@@ -21,6 +21,15 @@ subjectList = [
 ]
 
 def gradeManagement():
+
+    activityData = {
+        "name" : "",
+        "type" : "",
+        "subject" : "",
+        "score" : 0.0,
+        "maximum" : 0.0
+    }
+
     while True:
         print("1. Record grades")
         print("2. Display grade summary")
@@ -40,41 +49,16 @@ def gradeManagement():
                     match choice:
                         case 1:
                             while True:
-                                activityData = {
-                                    "name": input("Enter a name for the activity... "),
-                                    "type": "",
-                                    "subject": "",
-                                    "score": 0.0,
-                                    "maximum": 0.0
-                                }
-
-                                while activityData["type"] not in ["FA", "AA"]:
-                                    activityData["type"] = input("Is this an FA or an AA? ").upper()
-                                    if activityData["type"] not in ["FA", "AA"]:
-                                        print("Please enter a valid input.")
-
-                                while True:
-                                    try:
-                                        activityData["score"] = float(input("What is your score on this activity? "))
-                                        while activityData["maximum"] < activityData["score"]:
-                                            activityData["maximum"] = float(input("What is its maximum possible score? "))
-                                            if activityData["maximum"] < activityData["score"]:
-                                                print("The maximum possible score cannot be lower than the actual score.")
-                                    except:
-                                        print("Please enter a number. ")
-                                    else:
-                                        break
+                                activityData["name"] = input("Enter a name for the activity... ")
+                                activityData["type"] = input("Is this an AA or an FA? ").upper()
+                                activityData["maximum"] = float(input("What is its maximum possible score? "))
+                                activityData["score"] = float(input("What is your score on this activity? "))
                                 print()
 
                                 print("List of subjects:")
                                 for index, subject in enumerate(subjectList):
                                     print(f"{index}. {subject}")
-
-                                while True:
-                                    subjectID = int(input("Enter the number corresponding to this activity's subject... "))
-                                    if subjectID in range(0, len(subjectList)):
-                                        break
-                                    print(f"Please enter a number between 0 and {len(subjectList) - 1}.")
+                                subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
 
                                 activityData["subject"] = subjectList[subjectID]
@@ -103,7 +87,6 @@ def gradeManagement():
                     choice = input("Would you like to record another activity? (y/n) ").lower()
                     match choice:
                         case "y":
-                            print()
                             pass
                         case "n":
                             break
