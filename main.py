@@ -180,6 +180,10 @@ def printSubjectList():
         print(f"{index}. {subject}")
 
 def main():
+    print("Welcome to Student Management Hub!")
+    print("The objective of our program is to help students keep track of their grades and due dates.")
+    print("To track your grades, you can either do manual entry by entering activity scores or display grade summary. ")
+    print("To make a schedule, either record due dates or display deadline summary of activity/activities")
     while True:
         print()
         print("Menu:")
