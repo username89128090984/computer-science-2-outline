@@ -21,7 +21,12 @@ subjectList = [
 ]
 
 def gradeManagement():
-    activityData = {
+    activityFilename = "activities.json"
+
+    with open(activityFilename, 'r') as activityFile:
+        activityData = json.load(activityFile)
+
+    importedActivity = {
         "name" : "",
         "type" : "",
         "subject" : "",
@@ -48,25 +53,27 @@ def gradeManagement():
                     match choice:
                         case 1:
                             while True:
-                                activityData["name"] = input("Enter a name for the activity... ")
-                                activityData["type"] = input("Is this an AA or an FA? ").upper()
-                                activityData["maximum"] = float(input("What is its maximum possible score? "))
-                                activityData["score"] = float(input("What is your score on this activity? "))
+                                importedActivity["name"] = input("Enter a name for the activity... ")
+                                importedActivity["type"] = input("Is this an AA or an FA? ").upper()
+                                importedActivity["maximum"] = float(input("What is its maximum possible score? "))
+                                importedActivity["score"] = float(input("What is your score on this activity? "))
                                 print()
 
                                 printSubjectList()
                                 subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
 
-                                activityData["subject"] = subjectList[subjectID]
+                                importedActivity["subject"] = subjectList[subjectID]
 
-                                for key, value in activityData.items():
+                                for key, value in importedActivity.items():
                                     print(f"{key.title()}: {value}")
                                 choice = input("Are these details correct? (y/n) ")
 
                                 match choice:
                                     case "y":
-                                        print("[PLACEHOLDER - insert code for writing data to file once database is figured out]")
+                                        activityData.append(importedActivity)
+                                        with open(activityFilename, 'w') as activityFile:
+                                            json.dump(activityData, activityFile, indent = 4)
                                         break
                                     case "n":
                                         print()
