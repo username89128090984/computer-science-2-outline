@@ -5,19 +5,5 @@
         "subject": "Music",
         "score": 41.0,
         "maximum": 67.0
-    },
-    {
-        "name": "1",
-        "type": "1",
-        "subject": "Math 3 (geometry)",
-        "score": 1.0,
-        "maximum": 1.0
-    },
-    {
-        "name": "2",
-        "type": "2",
-        "subject": "English",
-        "score": 2.0,
-        "maximum": 2.0
     }
 ]

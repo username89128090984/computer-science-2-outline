@@ -16,6 +16,7 @@ subjectList = [
     "Health",
     "Music",
 
+    "Social Sciences",
     "ADTech",
     "Computer Science"
 ]
@@ -153,7 +154,7 @@ def scheduler():
                                     datetime.datetime.strptime(
                                         input("When is this due? (mm/dd/yyyy) "),
                                         dateFormat).date(),
-                                    dateFormat
+                                        dateFormat
                                     )
                             }
 
@@ -173,21 +174,11 @@ def scheduler():
                                 case "y":
                                     with open(deadlineFilename, 'w') as loadedFile:
                                         deadlineData.append(deadlineToBeLoaded)
-                                        json.dump(deadlineData, loadedFile, indent = 7)
+                                        json.dump(deadlineData, loadedFile, indent = 4)
                                     break
                                 case "n":
                                     print()
                                     continue
-                                case _:
-                                    print("Please enter either y(es) or n(o).")
-                                    print()
-
-                            choice = input("Would you like to record another activity? (y/n) ").lower()
-                            match choice:
-                                case "y":
-                                    pass
-                                case "n":
-                                    break
                                 case _:
                                     print("Please enter either y(es) or n(o).")
                                     print()
@@ -198,6 +189,16 @@ def scheduler():
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
+                print()
+
+        choice = input("Would you like to record another activity? (y/n) ").lower()
+        match choice:
+            case "y":
+                pass
+            case "n":
+                break
+            case _:
+                print("Please enter either y(es) or n(o).")
                 print()
 
 def printSubjectList():
