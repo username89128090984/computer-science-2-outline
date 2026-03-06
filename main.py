@@ -69,7 +69,7 @@ def gradeManagement():
                                 # Take inputs for each piece of information and store them in the buffer
                                 activityToBeLoaded = {
                                     "name": input("Enter a name for the activity... "),
-                                    "type": input("Is this an AA or an FA? ").upper(),
+                                    "type": input("Is this an [FA] or an [AA]? ").upper(),
                                     "subject": "",
                                     "score": float(input("What is your score on this activity? ")),
                                     "maximum": float(input("What is its maximum possible score? "))
@@ -174,7 +174,8 @@ def scheduler():
                             # Take inputs, store them in the buffer
                             deadlineToBeLoaded = {
                                 "name": input("Enter a name for the activity... "),
-                                "type": input("Is this an AA or an FA? ").upper(), "subject": "",
+                                "type": input("Is this an [FA] or an [AA]? ").upper(),
+                                "subject": "",
                                 # Format the date object into a string, for json files can't store date objects outright
                                 "deadline": datetime.datetime.strftime(
                                     # Convert inputted date string to a date object
@@ -239,6 +240,18 @@ def printSubjectList():
     for index, subject in enumerate(subjectList):
         print(f"{index}. {subject}")
 
+def instructions():
+    print("Most, if not all, of this program's menus are navigated by entering a number based on your desired outcome.")
+    print("At the prompt for your choice, enter the number and ONLY the number. (input validation will be added at a later point in time)\n")
+    print("When recording activities, the program will ask for information, one piece at a time.")
+    print("Most prompts will require you to simply enter a string or a number, which should be typed as-is without any other content.")
+    print("If the prompt requires a specific input/format (i.e., 'FA or AA', date inputs), the required input/format will be in square brackets/parentheses.\n")
+    print("Notes:")
+    print("NONE of the activity's data will be saved to the file until you confirm that the supplied information is correct.")
+    print("This is not the final product. Features are subject to addition and removal at any time, without due notice.")
+    print("This section may be revised heavily in the future.")
+    input("\nIf you've finished reading, press enter to continue. ")
+
 def main():
     while True:
         # Display menu and take user's choice as input
@@ -246,7 +259,8 @@ def main():
         print("Menu:")
         print("1. Grade Management System")
         print("2. Schedule Tracker")
-        print("3. Exit")
+        print("3. Instructions")
+        print("4. Exit")
         choice = int(input("Enter the number corresponding to your choice: "))
 
         match choice:
@@ -257,6 +271,9 @@ def main():
                 print()
                 scheduler()
             case 3:
+                print()
+                instructions()
+            case 4:
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
