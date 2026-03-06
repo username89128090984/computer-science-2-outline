@@ -21,18 +21,18 @@ subjectList = [
 ]
 
 def gradeManagement():
+    activityToBeLoaded = {
+        "name": "",
+        "type": "",
+        "subject": "",
+        "score": 0.0,
+        "maximum": 0.0
+    }
+
     activityFilename = "activities.json"
 
-    with open(activityFilename, 'r') as activityFile:
-        activityData = json.load(activityFile)
-
-    importedActivity = {
-        "name" : "",
-        "type" : "",
-        "subject" : "",
-        "score" : 0.0,
-        "maximum" : 0.0
-    }
+    with open(activityFilename, 'r') as loadedFile:
+        activityData = json.load(loadedFile)
 
     while True:
         print("1. Record grades")
@@ -53,27 +53,31 @@ def gradeManagement():
                     match choice:
                         case 1:
                             while True:
-                                importedActivity["name"] = input("Enter a name for the activity... ")
-                                importedActivity["type"] = input("Is this an AA or an FA? ").upper()
-                                importedActivity["maximum"] = float(input("What is its maximum possible score? "))
-                                importedActivity["score"] = float(input("What is your score on this activity? "))
+                                activityToBeLoaded = {
+                                    "name": input("Enter a name for the activity... "),
+                                    "type": input("Is this an AA or an FA? ").upper(),
+                                    "subject": "",
+                                    "score": float(input("What is your score on this activity? ")),
+                                    "maximum": float(input("What is its maximum possible score? "))
+                                }
+
                                 print()
 
                                 printSubjectList()
                                 subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
 
-                                importedActivity["subject"] = subjectList[subjectID]
+                                activityToBeLoaded["subject"] = subjectList[subjectID]
 
-                                for key, value in importedActivity.items():
+                                for key, value in activityToBeLoaded.items():
                                     print(f"{key.title()}: {value}")
-                                choice = input("Are these details correct? (y/n) ")
+                                choice = input("Are these details correct? (y/n) ").lower()
 
                                 match choice:
                                     case "y":
-                                        activityData.append(importedActivity)
-                                        with open(activityFilename, 'w') as activityFile:
-                                            json.dump(activityData, activityFile, indent = 4)
+                                        activityData.append(activityToBeLoaded)
+                                        with open(activityFilename, 'w') as loadedFile:
+                                            json.dump(activityData, loadedFile, indent = 4)
                                         break
                                     case "n":
                                         print()
@@ -110,12 +114,17 @@ def gradeManagement():
 
 
 def scheduler():
-    activityData = {
+    deadlineToBeLoaded = {
         "name": "",
         "type": "",
         "subject": "",
         "deadline": datetime.datetime.min
     }
+
+    deadlineFilename = "deadlines.json"
+
+    with open(deadlineFilename, 'r') as loadedFile:
+        deadlineData = json.load(loadedFile)
 
     dateFormat = "%m/%d/%Y"
 
@@ -137,24 +146,34 @@ def scheduler():
 
                     match choice:
                         case 1:
-                            activityData["name"] = input("Enter a name for the activity... ")
-                            activityData["type"] = input("Is this an AA or an FA? ").upper()
-                            activityData["deadline"] = datetime.datetime.strptime(input("When is this due? (mm/dd/yyyy) "), dateFormat)
+                            deadlineToBeLoaded = {
+                                "name": input("Enter a name for the activity... "),
+                                "type": input("Is this an AA or an FA? ").upper(), "subject": "",
+                                "deadline": datetime.datetime.strftime(
+                                    datetime.datetime.strptime(
+                                        input("When is this due? (mm/dd/yyyy) "),
+                                        dateFormat).date(),
+                                    dateFormat
+                                    )
+                            }
+
                             print()
 
                             printSubjectList()
                             subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                             print()
 
-                            activityData["subject"] = subjectList[subjectID]
+                            deadlineToBeLoaded["subject"] = subjectList[subjectID]
 
-                            for key, value in activityData.items():
+                            for key, value in deadlineToBeLoaded.items():
                                 print(f"{key.title()}: {value}")
-                            choice = input("Are these details correct? (y/n) ")
+                            choice = input("Are these details correct? (y/n) ").lower()
 
                             match choice:
                                 case "y":
-                                    print("[PLACEHOLDER - insert code for writing data to file once database is figured out]")
+                                    with open(deadlineFilename, 'w') as loadedFile:
+                                        deadlineData.append(deadlineToBeLoaded)
+                                        json.dump(deadlineData, loadedFile, indent = 7)
                                     break
                                 case "n":
                                     print()
