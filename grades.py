@@ -137,6 +137,7 @@ def gradeManagement():
                     if item == "AA":
                         print("AA")
                         print(activities)
+                        print()
                 print()
             case 3:
                 break
