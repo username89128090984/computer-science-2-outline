@@ -34,9 +34,15 @@ def gradeManagement():
         "maximum": 0.0
     }
 
+    gradeSum = {
+        "subject": "",
+        "units": 0.0,
+        "grade": 0.0,
+    }
+
     # Set target file
     activityFilename = "activities.json"
-
+    gradesFilename = ""
     # Load data from file, store it in memory as a variable
     with open(activityFilename, 'r') as loadedFile:
         activityData = json.load(loadedFile)
@@ -123,11 +129,11 @@ def gradeManagement():
             case 2:
                 print("[PLACEHOLDER - insert code for displaying a summary of the grades]")
                 print()
+                int(input(""))
             case 3:
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
-                print()
 
 # Function for the scheduler
 def scheduler():
