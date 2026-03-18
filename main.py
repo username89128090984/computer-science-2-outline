@@ -42,7 +42,7 @@ def gradeManagement():
 
     # Set target file
     activityFilename = "activities.json"
-    gradesFilename = ""
+    gradesFilename = "grades.json"
     # Load data from file, store it in memory as a variable
     with open(activityFilename, 'r') as loadedFile:
         activityData = json.load(loadedFile)
@@ -129,7 +129,20 @@ def gradeManagement():
             case 2:
                 print("[PLACEHOLDER - insert code for displaying a summary of the grades]")
                 print()
-                int(input(""))
+                while True:
+                    # Take inputs for each piece of information and store them in the buffer
+                    subj_no = int(input("How many subjects do you have?"))
+                    gradeSum = {
+                        "subject": input("Enter subject:"),
+                        "units": input("Enter units for subject:"),
+                        "grade": input("Enter final grade:"),
+                    }
+
+                    print()
+
+                    print()
+
+
             case 3:
                 break
             case _:

@@ -34,6 +34,12 @@ def SubjectGradeManagement():
         "maximum": 0.0
     }
 
+    gradeData = {
+        "subject": "",
+        "units": 0.0,
+        "grade": 0.0,
+    }
+
     while True:
         print("1. Record grades")
         print("2. Display grade summary")
@@ -77,7 +83,20 @@ def SubjectGradeManagement():
                                         break
                         case 2:
                             print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
-                            print()
+                            subj_no = int(input("How many subjects do you have?"))
+
+                            for subj_no in subj_no:
+                                gradeData["subject"] = input("Enter subject:")
+                                gradeData["units"] = input("Enter units for subject:")
+                                gradeData["grade"] = input("Enter final grade:")
+                                break
+
+                            all_grade = gradeData["grade"]
+                            total = sum(all_grade)
+                            final_average = total/gradeData["units"]
+                            print(final_average)
+
+
                         case 3:
                             break
                         case _:
