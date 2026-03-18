@@ -75,7 +75,7 @@ def gradeManagement():
                                     "maximum": float(input("What is its maximum possible score? "))
                                 }
 
-                                print()
+                                print()#yyy
                                 printSubjectList()
                                 subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
