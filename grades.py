@@ -23,6 +23,77 @@ subjectList = [
     "Computer Science"
 ]
 
+
+def StudentIDs():
+    StudentToBeLoaded = {
+        "id": "",
+        "batch": "",
+        "name": "",
+        "age": "",
+        "gender": ""
+    }
+
+    LogInDataToBeLoaded = {
+        "id": "",
+        "batch": "",
+        "name": "",
+    }
+
+    StudentFilename = "Students.json"
+
+    with open(StudentFilename, 'r') as loadedFile:
+        StudentData = json.load(loadedFile)
+
+    while True:
+        print()
+        print("Menu:")
+        print("1. Log In")
+        print("2. Sign Up")
+        print("3. Exit")
+        choice = int(input("Enter the number corresponding to your choice: "))
+
+        match choice:
+            case 1:
+                print()
+
+                with open(StudentFilename, 'r') as loadedFile:
+                    StudentData = json.load(loadedFile)
+
+            case 2:
+                print()
+                StudentDataToBeLoaded = {
+                    "id": input("Enter Student ID (xx-xxxx-xxx): "),
+                    "batch": int(input("Which Batch are you in? (Batch 20xx) ")),
+                    "name": input("What is you name? (Last, First): "),
+                    "age": int(input("How old are you? ")),
+                    "gender": input("Preferred Gender? ").upper()
+                }
+                if StudentDataToBeLoaded["age"] > 0:
+                    choice = input("Are these details correct? (y/n) ").lower()
+
+                    match choice:
+                        case "y":
+                            # Append buffer contents to the data in memory, write data to file
+                            StudentData.append(StudentDataToBeLoaded)
+                            with open(StudentFilename, 'w') as loadedFile:
+                                json.dump(StudentData, loadedFile, indent=4)
+                                main()
+                            break
+                        case "n":
+                            print()
+                            continue
+                        case _:
+                            print("Please enter either y(es) or n(o).")
+                            print()
+                else:
+                    print()
+                    print("Not a valid age number. Enter Again.")
+            case 3:
+                break
+            case _:
+                print("Please enter a number between 1 and 3.")
+
+
 # Function for the grade manager
 def gradeManagement():
     # Initialize activity data buffer
@@ -93,7 +164,7 @@ def gradeManagement():
                                         # Append buffer contents to the data in memory, write data to file
                                         activityData.append(activityToBeLoaded)
                                         with open(activityFilename, 'w') as loadedFile:
-                                            json.dump(activityData, loadedFile, indent = 4)
+                                            json.dump(activityData, loadedFile, indent=4)
                                         break
                                     case "n":
                                         print()
@@ -121,29 +192,15 @@ def gradeManagement():
                             print()
 
             case 2:
-                actTypeFA = []
-                actTypeAA = []
                 for activities in activityData:
-                    actTypeFA.append(activities["type"])
-                for item in actTypeFA:
-                    if item == "FA":
-                        print("FA")
-                        print(activities)
-                        print()
-
-                for activities in activityData:
-                    actTypeAA.append(activities["type"])
-                for item in actTypeAA:
-                    if item == "AA":
-                        print("AA")
-                        print(activities)
-                        print()
+                    print(activities)
                 print()
             case 3:
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
                 print()
+
 
 # Function for the scheduler
 def scheduler():
@@ -198,9 +255,9 @@ def scheduler():
                                     datetime.datetime.strptime(
                                         # Take date as input
                                         input("When is this due? (mm/dd/yyyy) "),
-                                        dateFormat).date(), # Get a date without the time
-                                        dateFormat
-                                    )
+                                        dateFormat).date(),  # Get a date without the time
+                                    dateFormat
+                                )
                             }
 
                             print()
@@ -222,7 +279,7 @@ def scheduler():
                                     # Append buffer's data to current data in memory, write current data to file
                                     deadlineData.append(deadlineToBeLoaded)
                                     with open(deadlineFilename, 'w') as loadedFile:
-                                        json.dump(deadlineData, loadedFile, indent = 4)
+                                        json.dump(deadlineData, loadedFile, indent=4)
                                     break
                                 case "n":
                                     print()
@@ -231,7 +288,8 @@ def scheduler():
                                     print("Please enter either y(es) or n(o).")
                                     print()
             case 2:
-                print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
+                for deadlines in deadlineData:
+                    print(deadlines)
                 print()
             case 3:
                 break
@@ -250,23 +308,31 @@ def scheduler():
                 print("Please enter either y(es) or n(o).")
                 print()
 
+
 def printSubjectList():
     print("List of subjects:")
     # The enumerate() function allows you to grab the index of a list element alongside the element
     for index, subject in enumerate(subjectList):
         print(f"{index}. {subject}")
 
+
 def instructions():
     print("Most, if not all, of this program's menus are navigated by entering a number based on your desired outcome.")
-    print("At the prompt for your choice, enter the number and ONLY the number. (input validation will be added at a later point in time)\n")
+    print(
+        "At the prompt for your choice, enter the number and ONLY the number. (input validation will be added at a later point in time)\n")
     print("When recording activities, the program will ask for information, one piece at a time.")
-    print("Most prompts will require you to simply enter a string or a number, which should be typed as-is without any other content.")
-    print("If the prompt requires a specific input/format (i.e., 'FA or AA', date inputs), the required input/format will be in square brackets/parentheses.\n")
+    print(
+        "Most prompts will require you to simply enter a string or a number, which should be typed as-is without any other content.")
+    print(
+        "If the prompt requires a specific input/format (i.e., 'FA or AA', date inputs), the required input/format will be in square brackets/parentheses.\n")
     print("Notes:")
-    print("NONE of the activity's data will be saved to the file until you confirm that the supplied information is correct.")
-    print("This is not the final product. Features are subject to addition and removal at any time, without due notice.")
+    print(
+        "NONE of the activity's data will be saved to the file until you confirm that the supplied information is correct.")
+    print(
+        "This is not the final product. Features are subject to addition and removal at any time, without due notice.")
     print("This section may be revised heavily in the future.")
     input("\nIf you've finished reading, press enter to continue. ")
+
 
 def main():
     while True:
@@ -294,5 +360,6 @@ def main():
             case _:
                 print("Please enter a number between 1 and 3.")
 
+
 # Call the main() function to set everything in motion
-main()
+StudentIDs()
