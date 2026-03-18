@@ -121,8 +121,11 @@ def gradeManagement():
                             print()
 
             case 2:
+                print()
+
                 for activities in activityData:
                     print(activities)
+
                 print()
             case 3:
                 break
@@ -216,13 +219,12 @@ def scheduler():
                                     print("Please enter either y(es) or n(o).")
                                     print()
             case 2:
-                sortedDeadlines = []
+                FADeadlines = [item for item in deadlines if item["type"] == "FA"]
+                AADeadlines = [item for item in deadlines if item["type"] == "AA"]
                 print()
-                for deadlines in deadlineData:
-                    sortedDeadlines.append(deadlines)
-                sortedDeadlines.sort(key = lambda deadline : datetime.datetime.strptime(deadline["deadline"], dateFormat))
 
-                for item in sortedDeadlines:
+
+                for item in sortedDeadlines if item["type"] == "AA":
                     dueTime = datetime.datetime.now() - datetime.datetime.strptime(item["deadline"], dateFormat)
                     if dueTime.days < 0:
                         print(f"Activity \"{item["name"]}\" was due {abs(dueTime.days)} days ago.")
