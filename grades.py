@@ -77,7 +77,7 @@ def SubjectGradeManagement():
                                         break
                         case 2:
                             print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
-                            print()
+                            print() #yyy
                         case 3:
                             break
                         case _:
