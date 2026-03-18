@@ -121,8 +121,11 @@ def gradeManagement():
                             print()
 
             case 2:
+                print()
+
                 for activities in activityData:
                     print(activities)
+
                 print()
             case 3:
                 break
@@ -216,9 +219,20 @@ def scheduler():
                                     print("Please enter either y(es) or n(o).")
                                     print()
             case 2:
-                for deadlines in deadlineData:
-                    print(deadlines)
+                FADeadlines = [item for item in deadlines if item["type"] == "FA"]
+                AADeadlines = [item for item in deadlines if item["type"] == "AA"]
                 print()
+
+
+                for item in sortedDeadlines if item["type"] == "AA":
+                    dueTime = datetime.datetime.now() - datetime.datetime.strptime(item["deadline"], dateFormat)
+                    if dueTime.days < 0:
+                        print(f"Activity \"{item["name"]}\" was due {abs(dueTime.days)} days ago.")
+                    else:
+                        print(f"Activity \"{item["name"]}\" is due in {dueTime.days} days.")
+
+                print()
+
             case 3:
                 break
             case _:
