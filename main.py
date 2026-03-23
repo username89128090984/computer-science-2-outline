@@ -233,8 +233,19 @@ def scheduler():
                             print("Please enter either y(es) or n(o).")
                             print()
             case 2:
-                print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
+                sortedDeadlines = []
                 print()
+                for deadlines in deadlineData:
+                    sortedDeadlines.append(deadlines)
+                sortedDeadlines.sort(key=lambda deadline: datetime.datetime.strptime(deadline["deadline"], dateFormat))
+
+                for item in sortedDeadlines:
+                    dueTime = datetime.datetime.now() - datetime.datetime.strptime(item["deadline"], dateFormat)
+                    if dueTime.days < 0:
+                        print(f"Activity \"{item["name"]}\" was due {abs(dueTime.days)} days ago.")
+                    else:
+                        print(f"Activity \"{item["name"]}\" is due in {dueTime.days} days.")
+
             case 3:
                 break
             case _:
