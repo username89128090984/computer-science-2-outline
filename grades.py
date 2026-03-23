@@ -75,7 +75,7 @@ def gradeManagement():
                                     "maximum": float(input("What is its maximum possible score? "))
                                 }
 
-                                print()#yyyyu
+                                print()
                                 printSubjectList()
                                 subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
@@ -106,6 +106,7 @@ def gradeManagement():
 
                         case 2:
                             print("[PLACEHOLDER - finish scheduler first, then insert code for retrieval from file]")
+
                         case _:
                             print("Please enter a number between 1 and 2.")
 

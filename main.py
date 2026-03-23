@@ -274,7 +274,9 @@ def scheduler():
                             print()
             case 2:
                 print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
-                print()
+                final = []
+                final = deadlineToBeLoaded["name"].append
+                print(final)
             case 3:
                 break
             case _:
