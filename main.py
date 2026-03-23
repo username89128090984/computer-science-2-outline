@@ -74,9 +74,15 @@ def gradeManagement():
         "maximum": 0.0
     }
 
+    gradeSum = {
+        "subject": "",
+        "units": 0.0,
+        "grade": 0.0,
+    }
+
     # Set target file
     activityFilename = "activities.json"
-
+    gradesFilename = ""
     # Load data from file, store it in memory as a variable
     with open(activityFilename, 'r') as loadedFile:
         activityData = json.load(loadedFile)
@@ -161,17 +167,13 @@ def gradeManagement():
                             print()
 
             case 2:
+                print("[PLACEHOLDER - insert code for displaying a summary of the grades]")
                 print()
-
-                for activities in activityData:
-                    print(activities)
-
-                print()
+                int(input(""))
             case 3:
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
-                print()
 
 # Function for the scheduler
 def scheduler():
@@ -195,6 +197,7 @@ def scheduler():
 
     while True:
         # Display menu, take user's choice
+        checkDeadlines(deadlineData, dateFormat)
         print("1. Record due dates")
         print("2. Display deadline summary")
         print("3. Back")
@@ -258,36 +261,24 @@ def scheduler():
                                 case _:
                                     print("Please enter either y(es) or n(o).")
                                     print()
+
+                    # Prompt user to record another activity (or not...)
+                    choice = input("Would you like to record another activity? (y/n) ").lower()
+                    match choice:
+                        case "y":
+                            pass
+                        case "n":
+                            break
+                        case _:
+                            print("Please enter either y(es) or n(o).")
+                            print()
             case 2:
-                FADeadlines = [item for item in deadlines if item["type"] == "FA"]
-                AADeadlines = [item for item in deadlines if item["type"] == "AA"]
+                print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
                 print()
-
-
-                for item in sortedDeadlines if item["type"] == "AA":
-                    dueTime = datetime.datetime.now() - datetime.datetime.strptime(item["deadline"], dateFormat)
-                    if dueTime.days < 0:
-                        print(f"Activity \"{item["name"]}\" was due {abs(dueTime.days)} days ago.")
-                    else:
-                        print(f"Activity \"{item["name"]}\" is due in {dueTime.days} days.")
-
-                print()
-
             case 3:
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
-                print()
-
-        # Prompt user to record another activity (or not...)
-        choice = input("Would you like to record another activity? (y/n) ").lower()
-        match choice:
-            case "y":
-                pass
-            case "n":
-                break
-            case _:
-                print("Please enter either y(es) or n(o).")
                 print()
 
 def printSubjectList():
@@ -295,6 +286,15 @@ def printSubjectList():
     # The enumerate() function allows you to grab the index of a list element alongside the element
     for index, subject in enumerate(subjectList):
         print(f"{index}. {subject}")
+
+def checkDeadlines(data, format):
+    almostDue = {}
+    for activity in data:
+        timeUntil = datetime.datetime.strptime(activity["deadline"], format) - datetime.datetime.now()
+        if timeUntil <= datetime.timedelta(days = 7):
+            almostDue[activity["name"]] = timeUntil
+    print("Note: the following activities are either almost due or overdue:")
+
 
 def instructions():
     print("Most, if not all, of this program's menus are navigated by entering a number based on your desired outcome.")
