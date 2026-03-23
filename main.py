@@ -23,6 +23,46 @@ subjectList = [
     "Computer Science"
 ]
 
+def StudentIDs():
+    StudentToBeLoaded = {
+        "id": "",
+        "batch": "",
+        "name": "",
+        "age": "",
+        "gender": ""
+    }
+
+    StudentFilename = "Students.json"
+
+    with open(StudentFilename, 'r') as loadedFile:
+        StudentData = json.load(loadedFile)
+
+    while True:
+        print()
+        print("Menu:")
+        print("1. Log In")
+        print("2. Sign Up")
+        print("3. Exit")
+        choice = int(input("Enter the number corresponding to your choice: "))
+
+        match choice:
+            case 1:
+                print()
+
+            case 2:
+                print()
+                activityToBeLoaded = {
+                    "id": input("Enter Student ID (00-0000-000): "),
+                    "batch": int(input("Which Batch are you in? (Batch 20##)")),
+                    "name": "",
+                    "age": float(input("How old are you? ")),
+                    "gender": input("Preferred Gender? ").upper()
+                }
+            case 3:
+                break
+            case _:
+                print("Please enter a number between 1 and 3.")
+
 # Function for the grade manager
 def gradeManagement():
     # Initialize activity data buffer
