@@ -12,5 +12,12 @@
         "subject": "Health",
         "score": 0.0,
         "maximum": 0.0
+    },
+    {
+        "name": "d",
+        "type": "FA",
+        "subject": "PE",
+        "score": 27.0,
+        "maximum": 30.0
     }
 ]

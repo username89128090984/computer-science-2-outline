@@ -1,5 +1,5 @@
 # Import necessary modules
-import json, datetime
+import json, datetime, math
 
 # Initialize list of subjects
 subjectList = [
@@ -112,6 +112,7 @@ def gradeManagement():
                         # ...manual entry:
                         case 1:
                             while True:
+                                syntaxFail = False
                                 # Take inputs for each piece of information and store them in the buffer
                                 activityToBeLoaded = {
                                     "name": input("Enter a name for the activity... "),
@@ -128,6 +129,8 @@ def gradeManagement():
 
                                 # Fill in the "subject" field based on the provided subject's ID
                                 activityToBeLoaded["subject"] = subjectList[subjectID]
+
+                                # add input validation here!!!
 
                                 # Display confirmation prompt
                                 for key, value in activityToBeLoaded.items():
@@ -262,6 +265,9 @@ def scheduler():
                                     print("Please enter either y(es) or n(o).")
                                     print()
 
+                        case 2:
+                            print("[PLACEHOLDER - functionality not yet implemented]")
+
                     # Prompt user to record another activity (or not...)
                     choice = input("Would you like to record another activity? (y/n) ").lower()
                     match choice:
@@ -285,6 +291,7 @@ def scheduler():
                         print(f"Activity \"{item["name"]}\" was due {abs(dueTime.days)} days ago.")
                     else:
                         print(f"Activity \"{item["name"]}\" is due in {dueTime.days} days.")
+                print()
 
             case 3:
                 break
