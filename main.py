@@ -37,8 +37,9 @@ def StudentIDs():
     with open(StudentFilename, 'r') as loadedFile:
         StudentData = json.load(loadedFile)
 
+
     while True:
-        print()
+
         print("Menu:")
         print("1. Log In")
         print("2. Sign Up")
@@ -329,7 +330,15 @@ def instructions():
 def main():
     while True:
         # Display menu and take user's choice as input
-        print()
+        print(".d8888b.          000000000000000"
+              "d88p Y88b\n"
+              "Y88b.\n"
+              "  Y888b\n"
+              "     Y88b.\n"
+              "       888\n"
+              "Y88b  d88p\n"
+              " Y88888P")
+        print("Welcome to Student Management Hub!")
         print("Menu:")
         print("1. Grade Management System")
         print("2. Schedule Tracker")
