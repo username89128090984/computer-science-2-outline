@@ -23,46 +23,6 @@ subjectList = [
     "Computer Science"
 ]
 
-def StudentIDs():
-    StudentToBeLoaded = {
-        "id": "",
-        "batch": "",
-        "name": "",
-        "age": "",
-        "gender": ""
-    }
-
-    StudentFilename = "Students.json"
-
-    with open(StudentFilename, 'r') as loadedFile:
-        StudentData = json.load(loadedFile)
-
-    while True:
-        print()
-        print("Menu:")
-        print("1. Log In")
-        print("2. Sign Up")
-        print("3. Exit")
-        choice = int(input("Enter the number corresponding to your choice: "))
-
-        match choice:
-            case 1:
-                print()
-
-            case 2:
-                print()
-                activityToBeLoaded = {
-                    "id": input("Enter Student ID (00-0000-000): "),
-                    "batch": int(input("Which Batch are you in? (Batch 20##)")),
-                    "name": "",
-                    "age": float(input("How old are you? ")),
-                    "gender": input("Preferred Gender? ").upper()
-                }
-            case 3:
-                break
-            case _:
-                print("Please enter a number between 1 and 3.")
-
 # Function for the grade manager
 def gradeManagement():
     # Initialize activity data buffer
@@ -170,9 +130,25 @@ def gradeManagement():
                             print()
 
             case 2:
-                print("[PLACEHOLDER - insert code for displaying a summary of the grades]")
-                print()
-                int(input(""))
+                # Initialize dictionary of dictionaries of sums
+                gradeTotals = {}
+
+                # For each subject...
+                for subject in subjectList:
+                    # ...create a key for it, then construct separate sum dictionaries for FAs and AAs (this is necessary, due to weightings)
+                    gradeTotals[subject] = {"FA" : {"scoreSum": 0, "totalSum": 0},
+                                            "AA" : {"scoreSum": 0, "totalSum": 0}}
+
+                # For each activity in the Files...
+                for activity in activityData:
+                    # Access the dict of totals
+                    # Access the dict of sums corresponding to the subject
+                    #
+                    gradeTotals[activity["subject"]][activity["type"]]["scoreSum"] += activity["score"]
+                    gradeTotals[activity["subject"]][activity["type"]]["totalSum"] += activity["maximum"]
+
+
+
             case 3:
                 break
             case _:
