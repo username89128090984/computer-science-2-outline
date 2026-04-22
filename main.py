@@ -136,18 +136,40 @@ def gradeManagement():
                 # For each subject...
                 for subject in subjectList:
                     # ...create a key for it, then construct separate sum dictionaries for FAs and AAs (this is necessary, due to weightings)
-                    gradeTotals[subject] = {"FA" : {"scoreSum": 0, "totalSum": 0},
-                                            "AA" : {"scoreSum": 0, "totalSum": 0}}
+                    gradeTotals[subject] = {"FA" : {"scoreSum" : 0, "totalSum" : 0, "average" : 0},
+                                            "AA" : {"scoreSum" : 0, "totalSum" : 0, "average" : 0}}
 
                 # For each activity in the Files...
                 for activity in activityData:
-                    # Access the dict of totals
-                    # Access the dict of sums corresponding to the subject
-                    #
+                    # Access the dict of totals and the dict of types corresponding to the subject
+                    # Access the dict of sums corresponding to the type
+                    # Access and update the sums
                     gradeTotals[activity["subject"]][activity["type"]]["scoreSum"] += activity["score"]
                     gradeTotals[activity["subject"]][activity["type"]]["totalSum"] += activity["maximum"]
+                    gradeTotals[activity["subject"]][activity["type"]]["average"] = (
+                            gradeTotals[activity["subject"]][activity["type"]]["scoreSum"] /
+                            gradeTotals[activity["subject"]][activity["type"]]["totalSum"]
+                            if gradeTotals[activity["subject"]][activity["type"]]["totalSum"] != 0 else 0)
 
+                print()
+                print("Grade summary:")
 
+                for subject in gradeTotals:
+                    print(subject)
+                    print(f"{"Component":<10}|{"Total":^7}|{"Maximum":^9}|{"Percentage":^12}|")
+
+                    print(f"{"FA":<10}|"
+                          f"{gradeTotals[subject]["FA"]["scoreSum"]:^7}|"
+                          f"{gradeTotals[subject]["FA"]["totalSum"]:^9}|"
+                          f"{gradeTotals[subject]["FA"]["average"] * 100:^12.2f}|")
+
+                    print(f"{"AA":<10}|"
+                          f"{gradeTotals[subject]["AA"]["scoreSum"]:^7}|"
+                          f"{gradeTotals[subject]["AA"]["totalSum"]:^9}|"
+                          f"{gradeTotals[subject]["AA"]["average"] * 100:^12.2f}|")
+
+                with open("test.json", 'w') as anotherFile:
+                    json.dump(gradeTotals, anotherFile, indent = 4)
 
             case 3:
                 break

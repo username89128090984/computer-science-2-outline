@@ -19,5 +19,19 @@
         "subject": "PE",
         "score": 27.0,
         "maximum": 30.0
+    },
+    {
+        "name": "40",
+        "type": "FA",
+        "subject": "Math 3 (geometry)",
+        "score": 40.0,
+        "maximum": 100.0
+    },
+    {
+        "name": "60",
+        "type": "FA",
+        "subject": "Math 3 (geometry)",
+        "score": 60.0,
+        "maximum": 100.0
     }
 ]
