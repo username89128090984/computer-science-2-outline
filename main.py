@@ -155,18 +155,35 @@ def gradeManagement():
                 print("Grade summary:")
 
                 for subject in gradeTotals:
+                    weightFA = 0.3
+                    weightAA = 0.7
+
+                    if gradeTotals[subject]["FA"]["totalSum"] == 0:
+                        weightFA = 0
+                    if gradeTotals[subject]["AA"]["totalSum"] == 0:
+                        weightAA = 0
+                        
                     print(subject)
-                    print(f"{"Component":<10}|{"Total":^7}|{"Maximum":^9}|{"Percentage":^12}|")
+                    print(f"{"Component":<10}|{"Total":^7}|{"Maximum":^9}|{"Percentage":^12}|{"Weighted%":^11}|")
 
                     print(f"{"FA":<10}|"
                           f"{gradeTotals[subject]["FA"]["scoreSum"]:^7}|"
                           f"{gradeTotals[subject]["FA"]["totalSum"]:^9}|"
-                          f"{gradeTotals[subject]["FA"]["average"] * 100:^12.2f}|")
+                          f"{gradeTotals[subject]["FA"]["average"] * 100:^12.2f}|"
+                          f"{(gradeTotals[subject]["FA"]["average"] * weightFA) * 100:^11.2f}|")
 
                     print(f"{"AA":<10}|"
                           f"{gradeTotals[subject]["AA"]["scoreSum"]:^7}|"
                           f"{gradeTotals[subject]["AA"]["totalSum"]:^9}|"
-                          f"{gradeTotals[subject]["AA"]["average"] * 100:^12.2f}|")
+                          f"{gradeTotals[subject]["AA"]["average"] * 100:^12.2f}|"
+                          f"{(gradeTotals[subject]["AA"]["average"] * weightAA) * 100:^11.2f}|")
+
+
+                    print(f"Final percentage: {((gradeTotals[subject]["FA"]["average"] * weightFA) * 100) +
+                                               ((gradeTotals[subject]["AA"]["average"] * weightAA) * 100):.2f}%")
+
+                    if input("Press enter to continue to next subject, type 'exit' to cancel: ").lower() == "exit":
+                        break
 
                 with open("test.json", 'w') as anotherFile:
                     json.dump(gradeTotals, anotherFile, indent = 4)
