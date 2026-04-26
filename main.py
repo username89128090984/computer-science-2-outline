@@ -1,5 +1,5 @@
 # Import necessary modules
-import json, datetime
+import json, datetime, math
 
 # Initialize list of subjects
 subjectList = [
@@ -34,9 +34,15 @@ def gradeManagement():
         "maximum": 0.0
     }
 
+    gradeSum = {
+        "subject": "",
+        "units": 0.0,
+        "grade": 0.0,
+    }
+
     # Set target file
     activityFilename = "activities.json"
-
+    gradesFilename = ""
     # Load data from file, store it in memory as a variable
     with open(activityFilename, 'r') as loadedFile:
         activityData = json.load(loadedFile)
@@ -66,6 +72,7 @@ def gradeManagement():
                         # ...manual entry:
                         case 1:
                             while True:
+                                syntaxFail = False
                                 # Take inputs for each piece of information and store them in the buffer
                                 activityToBeLoaded = {
                                     "name": input("Enter a name for the activity... "),
@@ -82,6 +89,8 @@ def gradeManagement():
 
                                 # Fill in the "subject" field based on the provided subject's ID
                                 activityToBeLoaded["subject"] = subjectList[subjectID]
+
+                                # add input validation here!!!
 
                                 # Display confirmation prompt
                                 for key, value in activityToBeLoaded.items():
@@ -121,13 +130,51 @@ def gradeManagement():
                             print()
 
             case 2:
-                print("[PLACEHOLDER - insert code for displaying a summary of the grades]")
+                # Initialize dictionary of dictionaries of sums
+                gradeTotals = {}
+
+                # For each subject...
+                for subject in subjectList:
+                    # ...create a key for it, then construct separate sum dictionaries for FAs and AAs (this is necessary, due to weightings)
+                    gradeTotals[subject] = {"FA" : {"scoreSum" : 0, "totalSum" : 0, "average" : 0},
+                                            "AA" : {"scoreSum" : 0, "totalSum" : 0, "average" : 0}}
+
+                # For each activity in the Files...
+                for activity in activityData:
+                    # Access the dict of totals and the dict of types corresponding to the subject
+                    # Access the dict of sums corresponding to the type
+                    # Access and update the sums
+                    gradeTotals[activity["subject"]][activity["type"]]["scoreSum"] += activity["score"]
+                    gradeTotals[activity["subject"]][activity["type"]]["totalSum"] += activity["maximum"]
+                    gradeTotals[activity["subject"]][activity["type"]]["average"] = (
+                            gradeTotals[activity["subject"]][activity["type"]]["scoreSum"] /
+                            gradeTotals[activity["subject"]][activity["type"]]["totalSum"]
+                            if gradeTotals[activity["subject"]][activity["type"]]["totalSum"] != 0 else 0)
+
                 print()
+                print("Grade summary:")
+
+                for subject in gradeTotals:
+                    print(subject)
+                    print(f"{"Component":<10}|{"Total":^7}|{"Maximum":^9}|{"Percentage":^12}|")
+
+                    print(f"{"FA":<10}|"
+                          f"{gradeTotals[subject]["FA"]["scoreSum"]:^7}|"
+                          f"{gradeTotals[subject]["FA"]["totalSum"]:^9}|"
+                          f"{gradeTotals[subject]["FA"]["average"] * 100:^12.2f}|")
+
+                    print(f"{"AA":<10}|"
+                          f"{gradeTotals[subject]["AA"]["scoreSum"]:^7}|"
+                          f"{gradeTotals[subject]["AA"]["totalSum"]:^9}|"
+                          f"{gradeTotals[subject]["AA"]["average"] * 100:^12.2f}|")
+
+                with open("test.json", 'w') as anotherFile:
+                    json.dump(gradeTotals, anotherFile, indent = 4)
+
             case 3:
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
-                print()
 
 # Function for the scheduler
 def scheduler():
@@ -151,6 +198,7 @@ def scheduler():
 
     while True:
         # Display menu, take user's choice
+        checkDeadlines(deadlineData, dateFormat)
         print("1. Record due dates")
         print("2. Display deadline summary")
         print("3. Back")
@@ -214,24 +262,39 @@ def scheduler():
                                 case _:
                                     print("Please enter either y(es) or n(o).")
                                     print()
+
+                        case 2:
+                            print("[PLACEHOLDER - functionality not yet implemented]")
+
+                    # Prompt user to record another activity (or not...)
+                    choice = input("Would you like to record another activity? (y/n) ").lower()
+                    match choice:
+                        case "y":
+                            pass
+                        case "n":
+                            break
+                        case _:
+                            print("Please enter either y(es) or n(o).")
+                            print()
             case 2:
-                print("[PLACEHOLDER - insert code for displaying a summary of the recorded deadlines]")
+                sortedDeadlines = []
                 print()
+                for deadlines in deadlineData:
+                    sortedDeadlines.append(deadlines)
+                sortedDeadlines.sort(key=lambda deadline: datetime.datetime.strptime(deadline["deadline"], dateFormat))
+
+                for item in sortedDeadlines:
+                    dueTime = datetime.datetime.now() - datetime.datetime.strptime(item["deadline"], dateFormat)
+                    if dueTime.days < 0:
+                        print(f"Activity \"{item["name"]}\" was due {abs(dueTime.days)} days ago.")
+                    else:
+                        print(f"Activity \"{item["name"]}\" is due in {dueTime.days} days.")
+                print()
+
             case 3:
                 break
             case _:
                 print("Please enter a number between 1 and 3.")
-                print()
-
-        # Prompt user to record another activity (or not...)
-        choice = input("Would you like to record another activity? (y/n) ").lower()
-        match choice:
-            case "y":
-                pass
-            case "n":
-                break
-            case _:
-                print("Please enter either y(es) or n(o).")
                 print()
 
 def printSubjectList():
@@ -239,6 +302,15 @@ def printSubjectList():
     # The enumerate() function allows you to grab the index of a list element alongside the element
     for index, subject in enumerate(subjectList):
         print(f"{index}. {subject}")
+
+def checkDeadlines(data, format):
+    almostDue = {}
+    for activity in data:
+        timeUntil = datetime.datetime.strptime(activity["deadline"], format) - datetime.datetime.now()
+        if timeUntil <= datetime.timedelta(days = 7):
+            almostDue[activity["name"]] = timeUntil
+    print("Note: the following activities are either almost due or overdue:")
+
 
 def instructions():
     print("Most, if not all, of this program's menus are navigated by entering a number based on your desired outcome.")
@@ -256,6 +328,35 @@ def main():
     while True:
         # Display menu and take user's choice as input
         print()
+        print(".d8888b.       ooooooooooooooo      88888      88888     8888888888          8888888888      88888           888     ooooooooooooooo\n"
+              "d88p Y88b      8'    888    '8      88888      88888     8888888888888       888             888888          888     8'    888    '8\n"
+              "Y88b.                888            88888      88888     8888     88888      888             8888888         888           888\n"
+              "  Y888b              888            88888      88888     8888      8888      888______       8888  8888      888           888\n"
+              "     Y88b.           888            88888      88888     8888      8888      888''''''       8888   8888     888           888\n"
+              "       888           888            88888      88888     8888     88888      888             8888    88888   888           888\n"
+              "Y88b  d88p           888             Y88b      8888      88888888888888      888             8888     8888888888           888\n"           
+              " Y88888P            o888o             Y88888888888       88888888888         8888888888      8888      888888888          o888o\n")
+        print()
+        print("88888                  88888             .o.             88888           888         .o.                 8888888888            8888888888        88888                  88888        8888888888      88888           888     ooooooooooooooo\n"
+              "888888                888888            .888.            888888          888        .888.              888888888888            888               888888                888888        888             888888          888     8'    888    '8\n"
+              "8888888              8888888           .8''888.          8888888         888       .8''888.          8888                      888               8888888              8888888        888             8888888         888           888\n"
+              "8888  8888        8888  8888          .8'  `888.         8888  8888      888      .8'  `888.         888    88888888888        888______         8888  8888        8888  8888        888______       8888  8888      888           888\n"
+              "8888   8888      8888   8888         .8ooooo8888.        8888   8888     888     .8ooooo8888.        888    88888888888        888''''''         8888   8888      8888   8888        888''''''       8888   8888     888           888\n"
+              "8888    88888  88888    8888        .8'      `888.       8888    88888   888    .8'      `888.       888           8888        888               8888    88888  88888    8888        888             8888    88888   888           888\n"
+              "8888     8888888888     8888       .8'        `888.      8888     8888888888   .8'        `888.      8888        8888          888               8888     8888888888     8888        888             8888     8888888888           888\n"
+              "8888      888888888     8888      o88o        o8888o     8888      888888888  o88o        o8888o       888888888888            8888888888        8888      888888888     8888        8888888888      8888      888888888          o888o\n")
+        print()
+        print("8888          8888       88888      88888        8888888888888\n"
+              "8888          8888       88888      88888        88888888888888\n"
+              "8888          8888       88888      88888        8888     888888\n"
+              "8888          8888       88888      88888        8888      8888\n"
+              "8888          8888       88888      88888        8888888888888\n"
+              "888888888888888888       88888      88888        88888888888888\n"
+              "888888888888888888       88888      88888        8888      88888\n"
+              "8888          8888       88888      88888        8888      888888\n"
+              "8888          8888        Y88b      8888         88888888888888\n"
+              "8888          8888         Y88888888888          8888888888888\n")
+
         print("Menu:")
         print("1. Grade Management System")
         print("2. Schedule Tracker")

@@ -16,5 +16,17 @@
         "type": "FA",
         "subject": "Social Sciences",
         "deadline": "03/09/2026"
+    },
+    {
+        "name": "White Day Proposal (White Lily)",
+        "type": "FA",
+        "subject": "Health",
+        "deadline": "03/14/2026"
+    },
+    {
+        "name": "a",
+        "type": "AA",
+        "subject": "Math 3 (geometry)",
+        "deadline": "12/27/2026"
     }
 ]
