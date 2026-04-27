@@ -1,5 +1,5 @@
 # Import necessary modules
-import json, datetime, math
+import json, datetime
 
 # Initialize list of subjects
 subjectList = [
@@ -25,24 +25,8 @@ subjectList = [
 
 # Function for the grade manager
 def gradeManagement():
-    # Initialize activity data buffer
-    activityToBeLoaded = {
-        "name": "",
-        "type": "",
-        "subject": "",
-        "score": 0.0,
-        "maximum": 0.0
-    }
-
-    gradeSum = {
-        "subject": "",
-        "units": 0.0,
-        "grade": 0.0,
-    }
-
     # Set target file
     activityFilename = "activities.json"
-    gradesFilename = ""
     # Load data from file, store it in memory as a variable
     with open(activityFilename, 'r') as loadedFile:
         activityData = json.load(loadedFile)
@@ -55,9 +39,8 @@ def gradeManagement():
 
         try:
             choice = int(input("Enter the number corresponding to your choice: "))
-        except:
+        except ValueError:
             print("Please enter a number.")
-            print()
             continue
 
         # If the user chose to...
@@ -65,104 +48,82 @@ def gradeManagement():
             # ...record activities:
             case 1:
                 while True:
-                    # Display menu and take user's choice as input
+                    # Take inputs for each piece of information and store them in the buffer
+                    activityToBeLoaded = {
+                        "name": input("Enter a name for the activity... "),
+                        "type": input("Is this an [FA] or an [AA]? ").upper(),
+                        "subject": ""
+                    }
+
+                    while True:
+                        try:
+                            activityToBeLoaded["score"] = float(input("What is your score on this activity? "))
+                            activityToBeLoaded["maximum"] = float(input("What is its maximum possible score? "))
+                        except ValueError:
+                            print("score/maximum may only be a number")
+                            continue
+                        else:
+                            break
+
                     print()
-                    print("How will you enter this activity's information?")
-                    print("1. Manual entry")
-                    print("2. Select an activity recorded from the schedule tracker")
-                    choice = int(input("Enter the number corresponding to your choice: "))
+                    printSubjectList()
+
+                    while True:
+                        try:
+                            subjectID = int(input("Enter the number corresponding to this activity's subject... "))
+                        except ValueError:
+                            print("Please enter a number from 1 - 13.")
+                        else:
+                            break
                     print()
 
-                    # If the user chose...
+                    errors = []
+                    if activityToBeLoaded["type"] not in ["FA", "AA"]:
+                        errors.append("type must be either 'FA' or 'AA'")
+                    if subjectID not in range(0, 14):
+                        errors.append("subject ID does not match any subjects")
+                    if activityToBeLoaded["score"] < 0 or activityToBeLoaded["maximum"] < 0:
+                        errors.append("neither the score nor maximum score may be negative")
+                    if activityToBeLoaded["maximum"] == 0:
+                        errors.append("maximum score may not be 0")
+
+                    # Intercepts execution if any of the above occur
+                    if errors:
+                        print("Activity not recorded due to one or more errors:")
+                        for error in errors:
+                            print(error)
+                        choice = input("Press enter to retry (or type 'exit' to cancel)... ").lower()
+                        print()
+                        if choice == 'exit':
+                            break
+                        continue
+
+                    # Fill in the "subject" field based on the provided subject's ID
+                    activityToBeLoaded["subject"] = subjectList[subjectID]
+
+                    # Display confirmation prompt
+                    for key, value in activityToBeLoaded.items():
+                        print(f"{key.title()}: {value}")
+                    choice = input("Are these details correct? (type 'y' to write to disk, anything else to go back) ").lower()
+
                     match choice:
-                        # ...manual entry:
-                        case 1:
-                            while True:
-                                syntaxFail = False
-                                # Take inputs for each piece of information and store them in the buffer
-
-                                activityToBeLoaded = {
-                                    "name": input("Enter a name for the activity... "),
-                                    "type": input("Is this an [FA] or an [AA]? ").upper(),
-                                    "subject": ""
-                                }
-
-                                while True:
-                                    try:
-                                        activityToBeLoaded = {
-                                            "score": float(input("What is your score on this activity? ")),
-                                            "maximum": float(input("What is its maximum possible score? "))
-                                        }
-                                    except:
-                                        print("score/maximum may only be a number")
-                                        continue
-                                    else:
-                                        break
-
-                                print()
-                                printSubjectList()
-                                subjectID = int(input("Enter the number corresponding to this activity's subject... "))
-                                print()
-
-                                # add input validation here!!!
-                                errors = []
-                                if activityToBeLoaded["type"] not in ["FA", "AA"]:
-                                    errors.append("type must be either 'FA' or 'AA'")
-                                if subjectID not in range(0, 14):
-                                    errors.append("subject ID does not match any subjects")
-                                if activityToBeLoaded["score"] < 0 or activityToBeLoaded["maximum"] < 0:
-                                    errors.append("neither the score nor maximum score may be negative")
-                                if activityToBeLoaded["maximum"] == 0:
-                                    errors.append("maximum score may not be 0")
-
-                                if errors != []:
-                                    print("Activity not recorded due to one or more errors:")
-                                    for error in errors:
-                                        print(error)
-                                    input("Press enter to continue... ")
-                                    print()
-                                    continue
-
-                                # Fill in the "subject" field based on the provided subject's ID
-                                activityToBeLoaded["subject"] = subjectList[subjectID]
-
-                                # Display confirmation prompt
-                                for key, value in activityToBeLoaded.items():
-                                    print(f"{key.title()}: {value}")
-                                choice = input("Are these details correct? (y/n) ").lower()
-
-                                match choice:
-                                    case "y":
-                                        # Append buffer contents to the data in memory, write data to file
-                                        activityData.append(activityToBeLoaded)
-                                        with open(activityFilename, 'w') as loadedFile:
-                                            json.dump(activityData, loadedFile, indent = 4)
-                                        break
-                                    case "n":
-                                        print()
-                                        continue
-                                    case _:
-                                        print("Please enter either y(es) or n(o).")
-                                        print()
-
-                                print()
-
-                        case 2:
-                            print("[PLACEHOLDER - finish scheduler first, then insert code for retrieval from file]")
+                        case "y":
+                            # Append buffer contents to the data in memory, write data to file
+                            activityData.append(activityToBeLoaded)
+                            with open(activityFilename, 'w') as loadedFile:
+                                json.dump(activityData, loadedFile, indent = 4)
                         case _:
-                            print("Please enter a number between 1 and 2.")
+                            print()
+                            continue
 
                     # Prompt user to record another activity (or not...)
-                    choice = input("Would you like to record another activity? (y/n) ").lower()
+                    choice = input("Enter 'y' to record another activity, anything else to exit... ").lower()
                     match choice:
                         case "y":
                             pass
-                        case "n":
-                            break
                         case _:
-                            print("Please enter either y(es) or n(o).")
-                            print()
-
+                            break
+            # ...display the grade summary:
             case 2:
                 # Initialize dictionary of dictionaries of sums
                 gradeTotals = {}
@@ -188,7 +149,7 @@ def gradeManagement():
                 print()
                 print("Grade summary:")
 
-                for subject in gradeTotals:
+                for counter, subject in enumerate(gradeTotals, start = 1):
                     weightFA = 0.3
                     weightAA = 0.7
 
@@ -197,7 +158,7 @@ def gradeManagement():
                     if gradeTotals[subject]["AA"]["totalSum"] == 0:
                         weightAA = 0
                         
-                    print(subject)
+                    print(f"{counter}/{len(subjectList)} | {subject}")
                     print(f"{"Component":<10}|{"Total":^7}|{"Maximum":^9}|{"Percentage":^12}|{"Weighted%":^11}|")
 
                     print(f"{"FA":<10}|"
@@ -216,7 +177,7 @@ def gradeManagement():
                     print(f"Final percentage: {((gradeTotals[subject]["FA"]["average"] * weightFA) * 100) +
                                                ((gradeTotals[subject]["AA"]["average"] * weightAA) * 100):.2f}%")
 
-                    if input("Press enter to continue to next subject, type 'exit' to cancel: ").lower() == "exit":
+                    if input("Press enter to continue, type 'exit' to cancel: ").lower() == "exit":
                         break
 
                 with open("test.json", 'w') as anotherFile:
@@ -229,14 +190,6 @@ def gradeManagement():
 
 # Function for the scheduler
 def scheduler():
-    # Initialize data buffer
-    deadlineToBeLoaded = {
-        "name": "",
-        "type": "",
-        "subject": "",
-        "deadline": datetime.datetime.min
-    }
-
     # Set target file
     deadlineFilename = "deadlines.json"
 
@@ -256,91 +209,94 @@ def scheduler():
 
         try:
             choice = int(input("Enter the number corresponding to your choice: "))
-        except:
+        except ValueError:
             print("Please enter a number.")
+        else:
             print()
             continue
 
         match choice:
             case 1:
-                while True:
-                    # Display menu, take user's choice
-                    print()
-                    print("How will you enter this activity's information?")
-                    print("1. Manual entry")
-                    print("2. Select an activity recorded from the schedule tracker")
+                # Take inputs, store them in the buffer
+                deadlineToBeLoaded = {
+                    "name": input("Enter a name for the activity... "),
+                    "type": input("Is this an [FA] or an [AA]? ").upper(),
+                    "subject": "",
+                }
 
+                while True:
                     try:
-                        choice = int(input("Enter the number corresponding to your choice: "))
+                        # Format the date object into a string, for json files can't store date objects outright
+                        deadlineToBeLoaded["deadline"] = (
+                            datetime.datetime.strftime(
+                                # Convert inputted date string to a date object
+                                datetime.datetime.strptime(
+                                    # Take date as input
+                                    input("When is this due? (mm/dd/yyyy) "),
+                                    dateFormat).date(),  # Get a date without the time
+                            dateFormat
+                            )
+                        )
                     except:
-                        print("Please enter a number.")
+                        print("Please enter a date according to the format.")
+                    else:
+                        print()
+                        break
+
+                # Ask for a subject ID, fill in "subject" field based on said ID
+                printSubjectList()
+
+                while True:
+                    try:
+                        subjectID = int(input("Enter the number corresponding to this activity's subject... "))
+                    except ValueError:
+                        print("Please enter a number from 1 - 13.")
+                    else:
+                        break
+
+                print()
+
+                errors = []
+                if deadlineToBeLoaded["type"] not in ["FA", "AA"]:
+                    errors.append("type must be either 'FA' or 'AA'")
+                if subjectID not in range(0, 14):
+                    errors.append("subject ID does not match any subjects")
+
+                # Intercepts execution if any of the above occurs
+                if errors:
+                    print("Activity not recorded due to one or more errors:")
+                    for error in errors:
+                        print(error)
+                    choice = input("Press enter to retry (or type 'exit' to cancel)... ").lower()
+                    print()
+                    if choice == 'exit':
+                        break
+                    continue
+
+                deadlineToBeLoaded["subject"] = subjectList[subjectID]
+
+                # Display confirmation prompt
+                for key, value in deadlineToBeLoaded.items():
+                    print(f"{key.title()}: {value}")
+                choice = input("Are these details correct? (type 'y' to write to disk, anything else to go back) ").lower()
+
+                match choice:
+                    case "y":
+                        # Append buffer's data to current data in memory, write current data to file
+                        deadlineData.append(deadlineToBeLoaded)
+                        with open(deadlineFilename, 'w') as loadedFile:
+                            json.dump(deadlineData, loadedFile, indent = 4)
+                    case _:
                         print()
                         continue
 
-                    print()
-
-                    # If the user chose...
-                    match choice:
-                        # ...manual entry:
-                        case 1:
-                            # Take inputs, store them in the buffer
-                            deadlineToBeLoaded = {
-                                "name": input("Enter a name for the activity... "),
-                                "type": input("Is this an [FA] or an [AA]? ").upper(),
-                                "subject": "",
-                                # Format the date object into a string, for json files can't store date objects outright
-                                "deadline": datetime.datetime.strftime(
-                                    # Convert inputted date string to a date object
-                                    datetime.datetime.strptime(
-                                        # Take date as input
-                                        input("When is this due? (mm/dd/yyyy) "),
-                                        dateFormat).date(), # Get a date without the time
-                                        dateFormat
-                                    )
-                            }
-
-                            print()
-
-                            # Ask for a subject ID, fill in "subject" field based on said ID
-                            printSubjectList()
-                            subjectID = int(input("Enter the number corresponding to this activity's subject... "))
-                            print()
-
-                            deadlineToBeLoaded["subject"] = subjectList[subjectID]
-
-                            # Display confirmation prompt
-                            for key, value in deadlineToBeLoaded.items():
-                                print(f"{key.title()}: {value}")
-                            choice = input("Are these details correct? (y/n) ").lower()
-
-                            match choice:
-                                case "y":
-                                    # Append buffer's data to current data in memory, write current data to file
-                                    deadlineData.append(deadlineToBeLoaded)
-                                    with open(deadlineFilename, 'w') as loadedFile:
-                                        json.dump(deadlineData, loadedFile, indent = 4)
-                                    break
-                                case "n":
-                                    print()
-                                    continue
-                                case _:
-                                    print("Please enter either y(es) or n(o).")
-                                    print()
-
-                        case 2:
-                            print("[PLACEHOLDER - functionality not yet implemented]")
-
-                    # Prompt user to record another activity (or not...)
-                    while True:
-                        choice = input("Would you like to record another activity? (y/n) ").lower()
-                        match choice:
-                            case "y":
-                                pass
-                            case "n":
-                                break
-                            case _:
-                                print("Please enter either y(es) or n(o).")
-                                print()
+                # Prompt user to record another activity (or not...)
+                choice = input("Enter 'y' to record another activity, anything else to exit... ").lower()
+                match choice:
+                    case "y":
+                        pass
+                    case _:
+                        break
             case 2:
                 sortedDeadlines = []
                 print()
@@ -374,7 +330,9 @@ def checkDeadlines(data, format):
         timeUntil = datetime.datetime.strptime(activity["deadline"], format) - datetime.datetime.now()
         if timeUntil <= datetime.timedelta(days = 7):
             almostDue[activity["name"]] = timeUntil
-    print("Note: the following activities are either almost due or overdue:")
+    print("Note: the following activities are either almost due or overdue (negative days = overdue):")
+    for activity, time in almostDue.items():
+        print(f"{activity} | {time.days} days, {time.seconds // 3600} hour/s")
 
 
 def instructions():
@@ -430,7 +388,7 @@ def main():
 
         try:
             choice = int(input("Enter the number corresponding to your choice: "))
-        except:
+        except ValueError:
             print("Please enter a number.")
             print()
             continue
