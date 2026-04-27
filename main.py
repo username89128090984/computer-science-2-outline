@@ -180,9 +180,6 @@ def gradeManagement():
                     if input("Press enter to continue, type [exit] to cancel: ").lower() == "exit":
                         break
 
-                with open("test.json", 'w') as anotherFile:
-                    json.dump(gradeTotals, anotherFile, indent = 4)
-
             case 3:
                 break
             case _:
@@ -335,6 +332,7 @@ def checkDeadlines(data, format):
 
 
 def instructions():
+    print("Instructions for use:")
     print("Most, if not all, of this program's menus are navigated by entering a number based on your desired outcome.")
     print("At the prompt for your choice, enter the number and ONLY the number.\n")
     print("When recording activities, the program will ask for information, one piece at a time.")
@@ -403,9 +401,10 @@ def main():
                 print()
                 instructions()
             case 4:
-                break
+                print("Fare thee well!")
+                return 0
             case _:
-                print("Please enter a number between 1 and 3.")
+                print("Please enter a number between 1 and 4.")
 
 # Call the main() function to set everything in motion
 main()
