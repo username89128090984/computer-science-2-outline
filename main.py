@@ -52,7 +52,13 @@ def gradeManagement():
         print("1. Record activities")
         print("2. Display grade summary")
         print("3. Back")
-        choice = int(input("Enter the number corresponding to your choice: "))
+
+        try:
+            choice = int(input("Enter the number corresponding to your choice: "))
+        except:
+            print("Please enter a number.")
+            print()
+            continue
 
         # If the user chose to...
         match choice:
@@ -74,23 +80,51 @@ def gradeManagement():
                             while True:
                                 syntaxFail = False
                                 # Take inputs for each piece of information and store them in the buffer
+
                                 activityToBeLoaded = {
                                     "name": input("Enter a name for the activity... "),
                                     "type": input("Is this an [FA] or an [AA]? ").upper(),
-                                    "subject": "",
-                                    "score": float(input("What is your score on this activity? ")),
-                                    "maximum": float(input("What is its maximum possible score? "))
+                                    "subject": ""
                                 }
+
+                                while True:
+                                    try:
+                                        activityToBeLoaded = {
+                                            "score": float(input("What is your score on this activity? ")),
+                                            "maximum": float(input("What is its maximum possible score? "))
+                                        }
+                                    except:
+                                        print("score/maximum may only be a number")
+                                        continue
+                                    else:
+                                        break
 
                                 print()
                                 printSubjectList()
                                 subjectID = int(input("Enter the number corresponding to this activity's subject... "))
                                 print()
 
+                                # add input validation here!!!
+                                errors = []
+                                if activityToBeLoaded["type"] not in ["FA", "AA"]:
+                                    errors.append("type must be either 'FA' or 'AA'")
+                                if subjectID not in range(0, 14):
+                                    errors.append("subject ID does not match any subjects")
+                                if activityToBeLoaded["score"] < 0 or activityToBeLoaded["maximum"] < 0:
+                                    errors.append("neither the score nor maximum score may be negative")
+                                if activityToBeLoaded["maximum"] == 0:
+                                    errors.append("maximum score may not be 0")
+
+                                if errors != []:
+                                    print("Activity not recorded due to one or more errors:")
+                                    for error in errors:
+                                        print(error)
+                                    input("Press enter to continue... ")
+                                    print()
+                                    continue
+
                                 # Fill in the "subject" field based on the provided subject's ID
                                 activityToBeLoaded["subject"] = subjectList[subjectID]
-
-                                # add input validation here!!!
 
                                 # Display confirmation prompt
                                 for key, value in activityToBeLoaded.items():
@@ -219,7 +253,13 @@ def scheduler():
         print("1. Record due dates")
         print("2. Display deadline summary")
         print("3. Back")
-        choice = int(input("Enter the number corresponding to your choice: "))
+
+        try:
+            choice = int(input("Enter the number corresponding to your choice: "))
+        except:
+            print("Please enter a number.")
+            print()
+            continue
 
         match choice:
             case 1:
@@ -229,7 +269,14 @@ def scheduler():
                     print("How will you enter this activity's information?")
                     print("1. Manual entry")
                     print("2. Select an activity recorded from the schedule tracker")
-                    choice = int(input("Enter the number corresponding to your choice: "))
+
+                    try:
+                        choice = int(input("Enter the number corresponding to your choice: "))
+                    except:
+                        print("Please enter a number.")
+                        print()
+                        continue
+
                     print()
 
                     # If the user chose...
@@ -284,15 +331,16 @@ def scheduler():
                             print("[PLACEHOLDER - functionality not yet implemented]")
 
                     # Prompt user to record another activity (or not...)
-                    choice = input("Would you like to record another activity? (y/n) ").lower()
-                    match choice:
-                        case "y":
-                            pass
-                        case "n":
-                            break
-                        case _:
-                            print("Please enter either y(es) or n(o).")
-                            print()
+                    while True:
+                        choice = input("Would you like to record another activity? (y/n) ").lower()
+                        match choice:
+                            case "y":
+                                pass
+                            case "n":
+                                break
+                            case _:
+                                print("Please enter either y(es) or n(o).")
+                                print()
             case 2:
                 sortedDeadlines = []
                 print()
@@ -379,7 +427,13 @@ def main():
         print("2. Schedule Tracker")
         print("3. Instructions")
         print("4. Exit")
-        choice = int(input("Enter the number corresponding to your choice: "))
+
+        try:
+            choice = int(input("Enter the number corresponding to your choice: "))
+        except:
+            print("Please enter a number.")
+            print()
+            continue
 
         match choice:
             case 1:

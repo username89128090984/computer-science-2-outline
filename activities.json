@@ -33,5 +33,12 @@
         "subject": "Math 3 (geometry)",
         "score": 60.0,
         "maximum": 100.0
+    },
+    {
+        "name": "shi",
+        "type": "AA",
+        "subject": "ES",
+        "score": 4.0,
+        "maximum": 4.0
     }
 ]
