@@ -92,7 +92,7 @@ def gradeManagement():
                         print("Activity not recorded due to one or more errors:")
                         for error in errors:
                             print(error)
-                        choice = input("Press enter to retry (or type 'exit' to cancel)... ").lower()
+                        choice = input("Press enter to retry (or type [exit] to cancel)... ").lower()
                         print()
                         if choice == 'exit':
                             break
@@ -104,7 +104,7 @@ def gradeManagement():
                     # Display confirmation prompt
                     for key, value in activityToBeLoaded.items():
                         print(f"{key.title()}: {value}")
-                    choice = input("Are these details correct? (type 'y' to write to disk, anything else to go back) ").lower()
+                    choice = input("Are these details correct? (type [y] to write to disk, anything else to go back) ").lower()
 
                     match choice:
                         case "y":
@@ -117,7 +117,7 @@ def gradeManagement():
                             continue
 
                     # Prompt user to record another activity (or not...)
-                    choice = input("Enter 'y' to record another activity, anything else to exit... ").lower()
+                    choice = input("Enter [y] to record another activity, anything else to exit... ").lower()
                     match choice:
                         case "y":
                             pass
@@ -177,7 +177,7 @@ def gradeManagement():
                     print(f"Final percentage: {((gradeTotals[subject]["FA"]["average"] * weightFA) * 100) +
                                                ((gradeTotals[subject]["AA"]["average"] * weightAA) * 100):.2f}%")
 
-                    if input("Press enter to continue, type 'exit' to cancel: ").lower() == "exit":
+                    if input("Press enter to continue, type [exit] to cancel: ").lower() == "exit":
                         break
 
                 with open("test.json", 'w') as anotherFile:
@@ -211,8 +211,6 @@ def scheduler():
             choice = int(input("Enter the number corresponding to your choice: "))
         except ValueError:
             print("Please enter a number.")
-        else:
-            print()
             continue
 
         match choice:
@@ -232,7 +230,7 @@ def scheduler():
                                 # Convert inputted date string to a date object
                                 datetime.datetime.strptime(
                                     # Take date as input
-                                    input("When is this due? (mm/dd/yyyy) "),
+                                    input("When is this due? [mm/dd/yyyy] "),
                                     dateFormat).date(),  # Get a date without the time
                             dateFormat
                             )
@@ -243,7 +241,6 @@ def scheduler():
                         print()
                         break
 
-                # Ask for a subject ID, fill in "subject" field based on said ID
                 printSubjectList()
 
                 while True:
@@ -267,18 +264,19 @@ def scheduler():
                     print("Activity not recorded due to one or more errors:")
                     for error in errors:
                         print(error)
-                    choice = input("Press enter to retry (or type 'exit' to cancel)... ").lower()
+                    choice = input("Press enter to retry (or type [exit] to cancel)... ").lower()
                     print()
                     if choice == 'exit':
                         break
                     continue
 
+                # Ask for a subject ID, fill in "subject" field based on said ID
                 deadlineToBeLoaded["subject"] = subjectList[subjectID]
 
                 # Display confirmation prompt
                 for key, value in deadlineToBeLoaded.items():
                     print(f"{key.title()}: {value}")
-                choice = input("Are these details correct? (type 'y' to write to disk, anything else to go back) ").lower()
+                choice = input("Are these details correct? (type [y] to write to disk, anything else to go back) ").lower()
 
                 match choice:
                     case "y":
@@ -291,7 +289,7 @@ def scheduler():
                         continue
 
                 # Prompt user to record another activity (or not...)
-                choice = input("Enter 'y' to record another activity, anything else to exit... ").lower()
+                choice = input("Enter [y] to record another activity, anything else to exit... ").lower()
                 match choice:
                     case "y":
                         pass
@@ -310,6 +308,7 @@ def scheduler():
                         print(f"Activity \"{item["name"]}\" was due {abs(dueTime.days)} days ago.")
                     else:
                         print(f"Activity \"{item["name"]}\" is due in {dueTime.days} days.")
+                input("Press enter to continue... ")
                 print()
 
             case 3:
@@ -337,14 +336,14 @@ def checkDeadlines(data, format):
 
 def instructions():
     print("Most, if not all, of this program's menus are navigated by entering a number based on your desired outcome.")
-    print("At the prompt for your choice, enter the number and ONLY the number. (input validation will be added at a later point in time)\n")
+    print("At the prompt for your choice, enter the number and ONLY the number.\n")
     print("When recording activities, the program will ask for information, one piece at a time.")
     print("Most prompts will require you to simply enter a string or a number, which should be typed as-is without any other content.")
     print("If the prompt requires a specific input/format (i.e., 'FA or AA', date inputs), the required input/format will be in square brackets/parentheses.\n")
     print("Notes:")
     print("NONE of the activity's data will be saved to the file until you confirm that the supplied information is correct.")
-    print("This is not the final product. Features are subject to addition and removal at any time, without due notice.")
-    print("This section may be revised heavily in the future.")
+    print("Textual inputs are case INsensitive.")
+    print("This is the latest (and hopefully last) revision of these instructions.")
     input("\nIf you've finished reading, press enter to continue. ")
 
 def main():
